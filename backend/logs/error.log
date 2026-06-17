@@ -1,0 +1,12 @@
+2026-05-21 11:31:07 [[31merror[39m]: Error: request to https://gmail.googleapis.com/gmail/v1/users/me/messages?q=%28from%3Ainfo%40bca.co.id%20OR%20from%3Anotifikasi%40bni.co.id%20OR%20from%3Amandiri%40bankmandiri.co.id%20OR%20from%3Abri%40bri.co.id%20OR%20from%3Ano-reply%40gopay.co.id%20OR%20from%3Ano-reply%40ovo.id%20OR%20from%3Ano-reply%40dana.id%20OR%20from%3Anotification%40shopee.co.id%20OR%20from%3Anoreply%40tokopedia.com%20OR%20from%3Aservice%40paypal.com%29%20after%3A1779335103&maxResults=100 failed, reason: 
+    at Gaxios._request (C:\Project\Porto\budgeting_app\backend\node_modules\gaxios\src\gaxios.ts:157:13)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at OAuth2Client.requestAsync (C:\Project\Porto\budgeting_app\backend\node_modules\google-auth-library\build\src\auth\oauth2client.js:429:18)
+    at GmailService.syncTransactions (C:\Project\Porto\budgeting_app\backend\src\modules\gmail\gmail.service.ts:48:26)
+    at Task._execution (C:\Project\Porto\budgeting_app\backend\src\jobs\sync-gmail.job.ts:28:24)
+2026-05-21 21:15:46 [[31merror[39m]: Error: request to https://gmail.googleapis.com/gmail/v1/users/me/messages?q=%28from%3Ainfo%40bca.co.id%20OR%20from%3Anotifikasi%40bni.co.id%20OR%20from%3Amandiri%40bankmandiri.co.id%20OR%20from%3Abri%40bri.co.id%20OR%20from%3Ano-reply%40gopay.co.id%20OR%20from%3Ano-reply%40ovo.id%20OR%20from%3Ano-reply%40dana.id%20OR%20from%3Anotification%40shopee.co.id%20OR%20from%3Anoreply%40tokopedia.com%20OR%20from%3Aservice%40paypal.com%29%20after%3A1779372000&maxResults=100 failed, reason: Client network socket disconnected before secure TLS connection was established
+    at Gaxios._request (C:\Project\Porto\budgeting_app\backend\node_modules\gaxios\src\gaxios.ts:157:13)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at OAuth2Client.requestAsync (C:\Project\Porto\budgeting_app\backend\node_modules\google-auth-library\build\src\auth\oauth2client.js:429:18)
+    at GmailService.syncTransactions (C:\Project\Porto\budgeting_app\backend\src\modules\gmail\gmail.service.ts:48:26)
+    at Task._execution (C:\Project\Porto\budgeting_app\backend\src\jobs\sync-gmail.job.ts:28:24)

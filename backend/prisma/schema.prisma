@@ -1,0 +1,112 @@
+// prisma/schema.prisma — SQLite mode untuk development lokal
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String    @id @default(cuid())
+  email            String    @unique
+  name             String
+  avatarUrl        String?
+  googleId         String    @unique
+  accessToken      String    // Gmail OAuth token (encrypted)
+  refreshToken     String    // Gmail refresh token (encrypted)
+  tokenExpiry      DateTime?
+  lastSyncAt       DateTime?
+  fcmToken         String?   // Firebase push token
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  transactions     Transaction[]
+  categories       Category[]
+  budgets          Budget[]
+  syncLogs         SyncLog[]
+}
+
+model Transaction {
+  id               String    @id @default(cuid())
+  userId           String
+  user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Data dari email
+  gmailMessageId   String?   @unique
+  emailSubject     String?
+  emailFrom        String?
+  emailDate        DateTime?
+
+  // Data transaksi hasil parsing
+  amount           Decimal
+  currency         String    @default("IDR")
+  type             String    // "DEBIT" / "CREDIT"
+  description      String
+  merchant         String?
+  referenceNumber  String?
+  balance          Decimal?
+
+  // Kategorisasi
+  categoryId       String?
+  category         Category? @relation(fields: [categoryId], references: [id])
+
+  // Metadata
+  source           String    // "BCA", "GOPAY", "MANUAL", etc.
+  isManual         Boolean   @default(false)
+  isParsed         Boolean   @default(true)
+  rawEmailBody     String?
+
+  transactionDate  DateTime
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  @@index([userId, transactionDate])
+  @@index([userId, categoryId])
+  @@index([gmailMessageId])
+}
+
+model Category {
+  id          String   @id @default(cuid())
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id])
+  name        String
+  icon        String
+  color       String
+  type        String   // "DEBIT" / "CREDIT"
+  isDefault   Boolean  @default(false)
+  keywords    String   @default("[]") // JSON string array
+  createdAt   DateTime @default(now())
+
+  transactions Transaction[]
+  budgets      Budget[]
+}
+
+model Budget {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id])
+  amount      Decimal
+  currency    String   @default("IDR")
+  period      String   // "WEEKLY" / "MONTHLY" / "YEARLY"
+  startDate   DateTime
+  endDate     DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model SyncLog {
+  id               String    @id @default(cuid())
+  userId           String
+  user             User      @relation(fields: [userId], references: [id])
+  startedAt        DateTime  @default(now())
+  completedAt      DateTime?
+  emailsChecked    Int       @default(0)
+  transactionFound Int       @default(0)
+  status           String    // "RUNNING" / "SUCCESS" / "FAILED" / "PARTIAL"
+  errorMessage     String?
+}
